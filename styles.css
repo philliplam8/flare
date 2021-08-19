@@ -3,11 +3,16 @@
     padding: 0;
 }
 
+html, body {
+    overflow-y: hidden; /* disable scrolling */
+}
+
 body {
     font-family: 'Inter', sans-serif;
     color: #eae2b7;
     background-color: #003049;
     display: flex;
+    position: relative; /* needed to disable vertical scrolling */
     flex-direction: column;
     text-align: center;
 }
