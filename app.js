@@ -1,4 +1,5 @@
 // Audio File
+var capSound = new Audio("UncapSound.mp3");
 var flareSound = new Audio("FlareSound.mp3");
 
 // DOM Object
@@ -13,6 +14,7 @@ const SWIPE_THRESHOLD = 200;
 const FLARE_MAX_DURATION = 100; // milliseconds
 const INSTRUCTIONS_CAP = "CLICK TO REMOVE CAP";
 const INSTRUCTIONS_FLARE = "SWIPE FLARE TO START";
+var capOn = true;
 
 // Mobile Detection Variables
 var initialX; 
@@ -26,6 +28,10 @@ function changeInstructions() {
 // Flare Cap
 function removeCap() {
     cap.style.visibility = "hidden";
+    if (capOn) {
+        capSound.play();
+        capOn = false;    
+    }
 }
 
 // Flame UI
@@ -51,8 +57,9 @@ function flicker() {
 
 // only works if the user taps the screenfirst then swipes
 function playAudio() {
-    var audio = document.getElementById("audio");
-    audio.play();
+    // var audio = document.getElementById("audio");
+    // audio.play();
+    flareSound.play();
 }
 
 // Mobile Detection
