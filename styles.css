@@ -11,6 +11,7 @@ html, body {
 body {
     font-family: 'Inter', sans-serif;
     color: #eae2b7;
+    /* background-color: black; */
     background-color: #003049;
     display: flex;
     position: relative;
@@ -21,6 +22,18 @@ body {
 
 h1 {
     margin: 50px;
+}
+
+.cap {
+    position: absolute;
+    top: 22%;
+    height: 150px;
+    width: 90px;
+    border-radius: 10%;
+    background-color: #eae2b7;
+    /* border: 1px solid black; */
+    z-index: 3;
+    visibility: visible;
 }
 
 .glow {

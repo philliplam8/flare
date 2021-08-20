@@ -4,10 +4,29 @@ var flareSound = new Audio("FlareSound.mp3");
 // DOM Object
 const glow = document.getElementsByClassName("glowtwo")[0];
 const flame = document.getElementsByClassName("flame")[0];
+const body = document.getElementsByTagName("body")[0];
+const cap = document.getElementsByClassName("cap")[0];
+const instructions = document.getElementsByClassName("instructions")[0];
+
+// Constants
+const SWIPE_THRESHOLD = 200; 
+const FLARE_MAX_DURATION = 100; // milliseconds
+const INSTRUCTIONS_CAP = "CLICK TO REMOVE CAP";
+const INSTRUCTIONS_FLARE = "SWIPE FLARE TO START";
 
 // Mobile Detection Variables
-var initialX;
+var initialX; 
 var initialY;
+
+// Instructions
+function changeInstructions() {
+    instructions.innerText = INSTRUCTIONS_FLARE;
+}
+
+// Flare Cap
+function removeCap() {
+    cap.style.visibility = "hidden";
+}
 
 // Flame UI
 
@@ -27,7 +46,7 @@ function flicker() {
     setTimeout(function () {
         toggleFlame();
         flicker();
-    }, Math.random() * 100);
+    }, Math.random() * FLARE_MAX_DURATION);
 }
 
 // only works if the user taps the screenfirst then swipes
@@ -41,6 +60,8 @@ function playAudio() {
 function touchStart(event) {
     initialX = event.touches[0].clientX;
     initialY = event.touches[0].clientY;
+    removeCap()
+    changeInstructions()
 }
 
 function touchMove(event) {
@@ -50,7 +71,7 @@ function touchMove(event) {
     var xDist = Math.abs(x - initialX);
     var yDist = Math.abs(y - initialY);
 
-    if (xDist > yDist) { // Horizontal Swipe
+    if (xDist > yDist && xDist > SWIPE_THRESHOLD) { // Horizontal Swipe
         console.log("Playing...");
         playAudio();
         setTimeout(function () {
