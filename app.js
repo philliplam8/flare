@@ -1,24 +1,30 @@
+// CONSTANTS AND VARIABLES ----------------------------------------------------
+
 // Audio File
 var capSound = new Audio("UncapSound.mp3");
 var flareSound = new Audio("FlareSound.mp3");
 
 // DOM Object
+const instructions = document.getElementsByClassName("instructions")[0];
+const cap = document.getElementsByClassName("cap")[0];
 const glow = document.getElementsByClassName("glowtwo")[0];
 const flame = document.getElementsByClassName("flame")[0];
+const flare = document.getElementById("flare");
 const body = document.getElementsByTagName("body")[0];
-const cap = document.getElementsByClassName("cap")[0];
-const instructions = document.getElementsByClassName("instructions")[0];
+
 
 // Constants
-const SWIPE_THRESHOLD = 200; 
+const SWIPE_THRESHOLD = 200;
 const FLARE_MAX_DURATION = 100; // milliseconds
 const INSTRUCTIONS_CAP = "CLICK TO REMOVE CAP";
 const INSTRUCTIONS_FLARE = "SWIPE FLARE TO START";
 var capOn = true;
 
 // Mobile Detection Variables
-var initialX; 
+var initialX;
 var initialY;
+
+// FUNCTIONS ------------------------------------------------------------------
 
 // Instructions
 function changeInstructions() {
@@ -30,7 +36,7 @@ function removeCap() {
     cap.style.visibility = "hidden";
     if (capOn) {
         capSound.play();
-        capOn = false;    
+        capOn = false;
     }
 }
 
@@ -55,20 +61,32 @@ function flicker() {
     }, Math.random() * FLARE_MAX_DURATION);
 }
 
-// only works if the user taps the screenfirst then swipes
 function playAudio() {
-    // var audio = document.getElementById("audio");
-    // audio.play();
-    flareSound.play();
+    flareSound.play(); // only works if user taps the screen first then swipes
 }
 
-// Mobile Detection
+
+// WRAPPER FUNCTIONS ----------------------------------------------------------
+
+function prepareFlare() {
+    removeCap();
+    changeInstructions();
+}
+
+function useFlare() {
+    console.log("Playing...");
+    playAudio();
+    setTimeout(function () {
+        flicker();
+    }, 1000);
+}
+
+// Mobile Detection -----------------------------------------------------------
 
 function touchStart(event) {
     initialX = event.touches[0].clientX;
     initialY = event.touches[0].clientY;
-    removeCap()
-    changeInstructions()
+    prepareFlare();
 }
 
 function touchMove(event) {
@@ -79,17 +97,18 @@ function touchMove(event) {
     var yDist = Math.abs(y - initialY);
 
     if (xDist > yDist && xDist > SWIPE_THRESHOLD) { // Horizontal Swipe
-        console.log("Playing...");
-        playAudio();
-        setTimeout(function () {
-            flicker();
-        }, 1000);
+        useFlare();
     }
 }
 
-document.addEventListener('touchstart', touchStart, false);
-document.addEventListener('touchmove', touchMove, false);
+document.addEventListener("touchstart", touchStart, false);
+document.addEventListener("touchmove", touchMove, false);
 
-// TODO
-//  Need to add a flare cap and tell the user to click to remove
-// Then swipe and strike
+// Desktop Detection ----------------------------------------------------------
+
+function desktopTouchMove(event) {
+    useFlare();
+}
+
+document.addEventListener("click", prepareFlare);
+flare.addEventListener("click", desktopTouchMove, false); 
